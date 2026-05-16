@@ -708,19 +708,6 @@ function App() {
       </aside>
 
       <main className="main">
-        <div className="topbar">
-          <div>
-            <span className="topbar-label">Sesion activa</span>
-            <strong>
-              {session.user.name} · {session.user.title}
-            </strong>
-          </div>
-          <button className="logout-btn topbar-btn" type="button" onClick={handleLogout}>
-            <span className="logout-icon" aria-hidden="true">X</span>
-            <span>Cerrar sesion</span>
-          </button>
-        </div>
-
         <section className="hero" id={session.user.role === "supervisor" ? "dashboard" : "nuevo-caso"}>
           <div>
             <p className="eyebrow">{session.user.title}</p>
@@ -868,39 +855,73 @@ function App() {
                   <h4>Ubicacion en terreno</h4>
                 </div>
 
-                <label>
-                  Origen de evidencia
-                  <select
-                    value={caseForm.source}
-                    onChange={(event) =>
-                      setCaseForm((current) => ({
-                        ...current,
-                        source: event.target.value,
-                      }))
-                    }
-                    disabled={caseForm.channel === "audio"}
-                  >
-                    <option value="camera">Camara del dispositivo</option>
-                    <option value="gallery">Galeria o archivos</option>
-                  </select>
-                </label>
-
                 <div className="geo-card">
                   <span className="detail-label">Georreferenciacion</span>
                   <div className="geo-actions">
                     <button
-                      className="secondary-btn geo-btn"
+                      className="action-btn action-btn-location"
                       type="button"
                       onClick={requestGeolocation}
                     >
-                      {geoStatus.loading ? "Obteniendo ubicacion..." : "Usar ubicacion actual"}
+                      <span className="action-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" className="action-icon-svg">
+                          <path
+                            d="M12 21s6-4.35 6-10a6 6 0 1 0-12 0c0 5.65 6 10 6 10Z"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <circle cx="12" cy="11" r="2.5" fill="currentColor" />
+                        </svg>
+                      </span>
+                      <span className="action-copy">
+                        <strong>
+                          {geoStatus.loading ? "Obteniendo..." : "Usar ubicacion"}
+                        </strong>
+                        <small>Capturar GPS actual</small>
+                      </span>
                     </button>
                     <button
-                      className="secondary-btn geo-btn"
+                      className="action-btn action-btn-address"
                       type="button"
                       onClick={lookupAddressFromLocation}
                     >
-                      {addressStatus.loading ? "Buscando direccion..." : "Buscar direccion"}
+                      <span className="action-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" className="action-icon-svg">
+                          <path
+                            d="M4 10.5 12 4l8 6.5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M6.5 9.5V20h11V9.5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                          <path
+                            d="M10 20v-5h4v5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <span className="action-copy">
+                        <strong>
+                          {addressStatus.loading ? "Buscando..." : "Buscar direccion"}
+                        </strong>
+                        <small>Autocompletar desde GPS</small>
+                      </span>
                     </button>
                   </div>
                   {caseForm.location ? (
@@ -935,6 +956,23 @@ function App() {
                   />
                 </label>
 
+                <label>
+                  Origen de evidencia
+                  <select
+                    value={caseForm.source}
+                    onChange={(event) =>
+                      setCaseForm((current) => ({
+                        ...current,
+                        source: event.target.value,
+                      }))
+                    }
+                    disabled={caseForm.channel === "audio"}
+                  >
+                    <option value="camera">Camara del dispositivo</option>
+                    <option value="gallery">Galeria o archivos</option>
+                  </select>
+                </label>
+
                 <label className="full-span">
                   Evidencia adjunta
                   {caseForm.source === "camera" && caseForm.channel !== "audio" ? (
@@ -942,11 +980,34 @@ function App() {
                       <div className="camera-actions">
                         {!cameraOpen ? (
                           <button
-                            className="secondary-btn"
+                            className="action-btn action-btn-camera"
                             type="button"
                             onClick={openDeviceCamera}
                           >
-                            Abrir camara
+                            <span className="action-icon" aria-hidden="true">
+                              <svg viewBox="0 0 24 24" className="action-icon-svg">
+                                <path
+                                  d="M4.5 8.5h3l1.4-2h6.2l1.4 2h3A1.5 1.5 0 0 1 21 10v8.5A1.5 1.5 0 0 1 19.5 20h-15A1.5 1.5 0 0 1 3 18.5V10a1.5 1.5 0 0 1 1.5-1.5Z"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="1.8"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <circle
+                                  cx="12"
+                                  cy="14"
+                                  r="3.2"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="1.8"
+                                />
+                              </svg>
+                            </span>
+                            <span className="action-copy">
+                              <strong>Abrir camara</strong>
+                              <small>Captura desde dispositivo</small>
+                            </span>
                           </button>
                         ) : null}
                         {cameraOpen && caseForm.channel === "foto" ? (
