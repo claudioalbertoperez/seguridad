@@ -643,7 +643,6 @@ function App() {
     <div className="shell">
       <aside className="sidebar">
         <div>
-          <p className="eyebrow">Municipalidad de Chile</p>
           <h1>Plataforma Movil de Seguridad Municipal</h1>
           <p className="sidebar-copy">
             {roleCopy[session.user.role].description}
@@ -669,25 +668,28 @@ function App() {
           ) : (
             <>
               <button
-                className={`nav-link nav-button ${inspectorView === "new-case" ? "active" : ""}`}
+                className={`nav-link nav-button nav-button-new-case ${inspectorView === "new-case" ? "active" : ""}`}
                 type="button"
                 onClick={() => setInspectorView("new-case")}
               >
-                Ingresar caso
+                <span className="nav-icon" aria-hidden="true">▤✎</span>
+                <span>Ingresar caso</span>
               </button>
               <button
-                className={`nav-link nav-button ${inspectorView === "records" ? "active" : ""}`}
+                className={`nav-link nav-button nav-button-records ${inspectorView === "records" ? "active" : ""}`}
                 type="button"
                 onClick={() => setInspectorView("records")}
               >
-                Mis casos
+                <span className="nav-icon" aria-hidden="true">≡</span>
+                <span>Mis casos</span>
               </button>
               <button
-                className={`nav-link nav-button ${inspectorView === "record-detail" ? "active" : ""}`}
+                className={`nav-link nav-button nav-button-detail ${inspectorView === "record-detail" ? "active" : ""}`}
                 type="button"
                 onClick={() => setInspectorView("record-detail")}
               >
-                Actas
+                <span className="nav-icon" aria-hidden="true">⌕</span>
+                <span>Actas</span>
               </button>
             </>
           )}
@@ -697,8 +699,9 @@ function App() {
           <div>
             <strong>{session.user.name}</strong>
             <p>{session.user.title}</p>
-            <button className="secondary-btn logout-btn" type="button" onClick={handleLogout}>
-              Cerrar sesion
+            <button className="logout-btn" type="button" onClick={handleLogout}>
+              <span className="logout-icon" aria-hidden="true">X</span>
+              <span>Cerrar sesion</span>
             </button>
           </div>
         </div>
@@ -712,8 +715,9 @@ function App() {
               {session.user.name} · {session.user.title}
             </strong>
           </div>
-          <button className="primary-btn topbar-btn" type="button" onClick={handleLogout}>
-            Cerrar sesion
+          <button className="logout-btn topbar-btn" type="button" onClick={handleLogout}>
+            <span className="logout-icon" aria-hidden="true">X</span>
+            <span>Cerrar sesion</span>
           </button>
         </div>
 
