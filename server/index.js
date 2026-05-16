@@ -9,6 +9,10 @@ const app = express();
 const port = Number(process.env.PORT) || 4000;
 const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
 const appBaseUrl = process.env.APP_BASE_URL || `http://localhost:${port}`;
+const allowedOrigins = frontendUrl
+  .split(",")
+  .map((item) => item.trim())
+  .filter(Boolean);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadsDir = path.join(__dirname, "..", "uploads");
@@ -21,12 +25,7 @@ app.use(
         return;
       }
 
-      const allowedOrigins = frontendUrl
-        .split(",")
-        .map((item) => item.trim())
-        .filter(Boolean);
-
-      if (allowedOrigins.includes(origin)) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
         return;
       }
@@ -208,4 +207,41 @@ function normalizeLocation(location) {
     accuracy: Number(location.accuracy) || null,
     capturedAt: location.capturedAt || new Date().toISOString(),
   };
+}
+
+function isAllowedOrigin(origin) {
+  if (allowedOrigins.includes(origin)) {
+    return true;
+  }
+
+  try {
+    const originUrl = new URL(origin);
+
+    if (originUrl.hostname === "localhost" || originUrl.hostname === "127.0.0.1") {
+      return true;
+    }
+
+    return allowedOrigins.some((allowedOrigin) => {
+      try {
+        const allowedUrl = new URL(allowedOrigin);
+
+        if (origin === allowedOrigin) {
+          return true;
+        }
+
+        if (
+          allowedUrl.hostname.endsWith(".vercel.app") &&
+          originUrl.hostname.endsWith(".vercel.app")
+        ) {
+          return true;
+        }
+
+        return false;
+      } catch {
+        return false;
+      }
+    });
+  } catch {
+    return false;
+  }
 }
