@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: fiscaliza-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run server
+    envVars:
+      - key: FRONTEND_URL
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
