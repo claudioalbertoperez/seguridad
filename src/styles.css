@@ -93,6 +93,15 @@ textarea {
   max-width: 640px;
 }
 
+.auth-panel > div:first-child {
+  text-align: center;
+}
+
+.auth-panel > div:first-child .auth-copy {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .field-hint {
   margin-top: 8px;
   color: var(--muted);
@@ -146,6 +155,10 @@ textarea {
   color: rgba(238, 245, 251, 0.76);
 }
 
+.sidebar > div:first-child {
+  text-align: center;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   font-size: 0.78rem;
@@ -172,12 +185,56 @@ textarea {
 .nav-button {
   border: none;
   text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.14);
+  color: #eef5fb;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .nav-link:hover,
 .nav-link.active {
   background: rgba(143, 208, 245, 0.14);
   transform: translateX(2px);
+}
+
+.nav-button-new-case {
+  background: linear-gradient(135deg, rgba(45, 160, 95, 0.3), rgba(69, 197, 124, 0.14));
+}
+
+.nav-button-records {
+  background: linear-gradient(135deg, rgba(62, 137, 217, 0.26), rgba(143, 208, 245, 0.16));
+}
+
+.nav-button-detail {
+  background: linear-gradient(135deg, rgba(173, 84, 209, 0.28), rgba(115, 88, 235, 0.16));
+}
+
+.nav-button-new-case.active,
+.nav-button-new-case:hover {
+  background: linear-gradient(135deg, rgba(45, 160, 95, 0.55), rgba(69, 197, 124, 0.32));
+}
+
+.nav-button-records.active,
+.nav-button-records:hover {
+  background: linear-gradient(135deg, rgba(62, 137, 217, 0.5), rgba(143, 208, 245, 0.3));
+}
+
+.nav-button-detail.active,
+.nav-button-detail:hover {
+  background: linear-gradient(135deg, rgba(173, 84, 209, 0.5), rgba(115, 88, 235, 0.28));
 }
 
 .sidebar-card {
@@ -191,6 +248,30 @@ textarea {
 
 .logout-btn {
   margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #b54056, #8f2338);
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 10px 24px rgba(143, 35, 56, 0.24);
+}
+
+.logout-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  font-size: 0.82rem;
+  line-height: 1;
 }
 
 .status-dot {
@@ -584,6 +665,66 @@ textarea {
   flex-wrap: wrap;
 }
 
+.action-btn {
+  min-height: 86px;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(18, 37, 58, 0.18);
+}
+
+.action-btn-location {
+  background: linear-gradient(135deg, #2d8fd0, #55b5f0);
+}
+
+.action-btn-address {
+  background: linear-gradient(135deg, #5a78d6, #86a3ff);
+}
+
+.action-btn-camera {
+  background: linear-gradient(135deg, #15a36a, #45c57c);
+}
+
+.action-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.action-icon-svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.action-copy {
+  display: grid;
+  gap: 3px;
+}
+
+.action-copy strong {
+  font-size: 0.98rem;
+  line-height: 1.1;
+}
+
+.action-copy small {
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.78rem;
+}
+
 .geo-values {
   display: grid;
   gap: 6px;
@@ -741,6 +882,12 @@ textarea {
     padding: 12px 10px;
   }
 
+  .nav-button {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+  }
+
   .topbar {
     padding: 12px 14px;
     border-radius: 18px;
@@ -750,6 +897,10 @@ textarea {
   .geo-btn,
   .primary-btn,
   .secondary-btn {
+    width: 100%;
+  }
+
+  .action-btn {
     width: 100%;
   }
 
@@ -830,6 +981,10 @@ textarea {
   }
 
   .camera-actions {
+    display: grid;
+  }
+
+  .geo-actions {
     display: grid;
   }
 
