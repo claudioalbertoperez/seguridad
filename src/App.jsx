@@ -588,25 +588,12 @@ function App() {
       <div className="auth-shell">
         <section className="auth-panel">
           <div>
-            <p className="eyebrow">Fiscalizacion municipal</p>
+            <p className="eyebrow">Plataforma Movil de Seguridad Municipal</p>
             <h1>Acceso por perfil</h1>
             <p className="auth-copy">
               Ingresa como inspector municipal para registrar un caso o como
               supervisor para revisar el dashboard operativo.
             </p>
-          </div>
-
-          <div className="credential-cards">
-            <div className="credential-card">
-              <strong>Inspector municipal</strong>
-              <span>usuario: inspector</span>
-              <span>clave: 1234</span>
-            </div>
-            <div className="credential-card">
-              <strong>Supervisor</strong>
-              <span>usuario: supervisor</span>
-              <span>clave: 1234</span>
-            </div>
           </div>
 
           <form className="login-form" onSubmit={handleLogin}>
@@ -636,7 +623,7 @@ function App() {
                     password: event.target.value,
                   }))
                 }
-                placeholder="1234"
+                placeholder="login"
                 required
               />
             </label>
@@ -657,7 +644,7 @@ function App() {
       <aside className="sidebar">
         <div>
           <p className="eyebrow">Municipalidad de Chile</p>
-          <h1>Fiscaliza Web</h1>
+          <h1>Plataforma Movil de Seguridad Municipal</h1>
           <p className="sidebar-copy">
             {roleCopy[session.user.role].description}
           </p>
