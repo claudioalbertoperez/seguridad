@@ -62,13 +62,72 @@ app.post("/api/login", (req, res) => {
 
   res.json({
     token: `mock-token-${user.role}`,
-    user: {
-      id: user.id,
-      name: user.name,
-      role: user.role,
-      title: user.title,
-      username: user.username,
+    user: buildUserPayload(user),
+  });
+});
+
+app.put("/api/users/:id/profile", (req, res) => {
+  const user = users.find((item) => item.id === req.params.id);
+  const personal = req.body?.personal ?? {};
+
+  if (!user) {
+    res.status(404).json({ message: "Usuario no encontrado" });
+    return;
+  }
+
+  if (!personal.email || !personal.phone) {
+    res.status(400).json({ message: "Completa correo y telefono para guardar." });
+    return;
+  }
+
+  user.profile = {
+    ...user.profile,
+    personal: {
+      ...user.profile.personal,
+      rut: personal.rut?.trim() || user.profile.personal.rut,
+      email: personal.email?.trim() || user.profile.personal.email,
+      phone: personal.phone?.trim() || user.profile.personal.phone,
+      emergencyContact:
+        personal.emergencyContact?.trim() || user.profile.personal.emergencyContact,
     },
+  };
+
+  res.json({
+    message: "Datos personales actualizados correctamente.",
+    user: buildUserPayload(user),
+  });
+});
+
+app.put("/api/users/:id/password", (req, res) => {
+  const user = users.find((item) => item.id === req.params.id);
+  const { currentPassword, newPassword, confirmPassword } = req.body ?? {};
+
+  if (!user) {
+    res.status(404).json({ message: "Usuario no encontrado" });
+    return;
+  }
+
+  if (currentPassword !== user.password) {
+    res.status(400).json({ message: "La contrasena actual no coincide." });
+    return;
+  }
+
+  if (!newPassword || newPassword.length < 6) {
+    res
+      .status(400)
+      .json({ message: "La nueva contrasena debe tener al menos 6 caracteres." });
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    res.status(400).json({ message: "La confirmacion de contrasena no coincide." });
+    return;
+  }
+
+  user.password = newPassword;
+
+  res.json({
+    message: "Contrasena actualizada correctamente.",
   });
 });
 
@@ -244,4 +303,15 @@ function isAllowedOrigin(origin) {
   } catch {
     return false;
   }
+}
+
+function buildUserPayload(user) {
+  return {
+    id: user.id,
+    name: user.name,
+    role: user.role,
+    title: user.title,
+    username: user.username,
+    profile: user.profile,
+  };
 }

@@ -22,6 +22,12 @@ const roleCopy = {
   },
 };
 
+const profileSectionTitles = {
+  personal: "Datos personales",
+  municipal: "Datos municipales",
+  platform: "Datos de la plataforma",
+};
+
 const initialForm = {
   category: "ruidos",
   priority: "medium",
@@ -201,6 +207,57 @@ function App() {
     setCameraStatus({ loading: false, error: "", success: "" });
     window.location.hash = "";
     window.scrollTo({ top: 0, behavior: "auto" });
+  }
+
+  async function handleProfileUpdate(personalData) {
+    if (!session?.user?.id) {
+      throw new Error("No hay una sesion activa para actualizar datos.");
+    }
+
+    const response = await fetch(`${API_URL}/users/${session.user.id}/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        personal: personalData,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "No fue posible actualizar el perfil.");
+    }
+
+    setSession((current) => ({
+      ...current,
+      user: data.user,
+    }));
+
+    return data.message;
+  }
+
+  async function handlePasswordUpdate(passwordData) {
+    if (!session?.user?.id) {
+      throw new Error("No hay una sesion activa para actualizar la contrasena.");
+    }
+
+    const response = await fetch(`${API_URL}/users/${session.user.id}/password`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(passwordData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "No fue posible actualizar la contrasena.");
+    }
+
+    return data.message;
   }
 
   async function handleCreateCase(event) {
@@ -690,6 +747,22 @@ function App() {
               >
                 <span className="nav-icon" aria-hidden="true">⌕</span>
                 <span>Actas</span>
+              </button>
+              <button
+                className={`nav-link nav-button nav-button-profile ${inspectorView === "profile" ? "active" : ""}`}
+                type="button"
+                onClick={() => setInspectorView("profile")}
+              >
+                <span className="nav-icon" aria-hidden="true">ID</span>
+                <span>Mis datos</span>
+              </button>
+              <button
+                className={`nav-link nav-button nav-button-shifts ${inspectorView === "shifts" ? "active" : ""}`}
+                type="button"
+                onClick={() => setInspectorView("shifts")}
+              >
+                <span className="nav-icon" aria-hidden="true">JR</span>
+                <span>Mis turnos</span>
               </button>
             </>
           )}
@@ -1197,6 +1270,40 @@ function App() {
                 </article>
               </section>
             ) : null}
+
+            {inspectorView === "profile" ? (
+              <section className="single-panel-layout" id="mis-datos">
+                <article className="panel">
+                  <div className="panel-head">
+                    <div>
+                      <p className="eyebrow">Mis datos</p>
+                      <h3>Ficha del inspector municipal</h3>
+                    </div>
+                  </div>
+
+                  <ProfilePanel
+                    user={session.user}
+                    onProfileSave={handleProfileUpdate}
+                    onPasswordSave={handlePasswordUpdate}
+                  />
+                </article>
+              </section>
+            ) : null}
+
+            {inspectorView === "shifts" ? (
+              <section className="single-panel-layout" id="mis-turnos">
+                <article className="panel">
+                  <div className="panel-head">
+                    <div>
+                      <p className="eyebrow">Mis turnos</p>
+                      <h3>Agenda operativa y rutas</h3>
+                    </div>
+                  </div>
+
+                  <ShiftPanel user={session.user} />
+                </article>
+              </section>
+            ) : null}
           </>
         ) : (
           <>
@@ -1380,11 +1487,296 @@ function inspectorHero(view) {
     };
   }
 
+  if (view === "profile") {
+    return {
+      title: "Mis datos y acceso operativo",
+      description:
+        "Consulta tu informacion personal, credenciales municipales y configuracion principal de la plataforma.",
+    };
+  }
+
+  if (view === "shifts") {
+    return {
+      title: "Mis turnos y rutas asignadas",
+      description:
+        "Revisa tus jornadas, horarios de cobertura y recorridos definidos para cada turno operativo.",
+    };
+  }
+
   return {
     title: "Ingreso de casos en terreno",
     description:
       "Registra fiscalizaciones, completa antecedentes y genera un nuevo caso para seguimiento municipal.",
   };
+}
+
+function ProfilePanel({ user, onProfileSave, onPasswordSave }) {
+  const profile = user?.profile;
+  const [personalForm, setPersonalForm] = useState(() => buildPersonalForm(profile));
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [personalStatus, setPersonalStatus] = useState({
+    loading: false,
+    error: "",
+    success: "",
+  });
+  const [passwordStatus, setPasswordStatus] = useState({
+    loading: false,
+    error: "",
+    success: "",
+  });
+
+  useEffect(() => {
+    setPersonalForm(buildPersonalForm(profile));
+  }, [profile]);
+
+  if (!profile) {
+    return <p>No hay datos de perfil disponibles para este usuario.</p>;
+  }
+
+  async function handleSubmitPersonal(event) {
+    event.preventDefault();
+
+    try {
+      setPersonalStatus({ loading: true, error: "", success: "" });
+      const message = await onProfileSave(personalForm);
+      setPersonalStatus({ loading: false, error: "", success: message });
+    } catch (error) {
+      setPersonalStatus({
+        loading: false,
+        error: error.message || "No fue posible guardar los datos personales.",
+        success: "",
+      });
+    }
+  }
+
+  async function handleSubmitPassword(event) {
+    event.preventDefault();
+
+    try {
+      setPasswordStatus({ loading: true, error: "", success: "" });
+      const message = await onPasswordSave(passwordForm);
+      setPasswordForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setPasswordStatus({ loading: false, error: "", success: message });
+    } catch (error) {
+      setPasswordStatus({
+        loading: false,
+        error: error.message || "No fue posible cambiar la contrasena.",
+        success: "",
+      });
+    }
+  }
+
+  return (
+    <div className="profile-layout">
+      <div className="profile-summary">
+        <div className="profile-avatar" aria-hidden="true">
+          {getInitials(user.name)}
+        </div>
+        <div>
+          <p className="eyebrow">Inspector identificado</p>
+          <h4>{user.name}</h4>
+          <p className="profile-summary-copy">{user.title}</p>
+        </div>
+      </div>
+
+      <div className="detail-grid">
+        <DetailCard label="Usuario" value={user.username} />
+        <DetailCard label="Perfil" value={profile.platform?.appRole || user.title} />
+        <DetailCard label="Unidad" value={profile.municipal?.unit || "-"} />
+        <DetailCard label="Credencial" value={profile.municipal?.badgeId || "-"} />
+      </div>
+
+      <div className="profile-grid">
+        <article className="detail-block profile-card">
+          <span className="detail-label">{profileSectionTitles.personal}</span>
+          <form className="profile-form" onSubmit={handleSubmitPersonal}>
+            <label>
+              RUT
+              <input
+                type="text"
+                value={personalForm.rut}
+                onChange={(event) =>
+                  setPersonalForm((current) => ({
+                    ...current,
+                    rut: event.target.value,
+                  }))
+                }
+              />
+            </label>
+            <label>
+              Correo institucional
+              <input
+                type="email"
+                value={personalForm.email}
+                onChange={(event) =>
+                  setPersonalForm((current) => ({
+                    ...current,
+                    email: event.target.value,
+                  }))
+                }
+                required
+              />
+            </label>
+            <label>
+              Telefono
+              <input
+                type="text"
+                value={personalForm.phone}
+                onChange={(event) =>
+                  setPersonalForm((current) => ({
+                    ...current,
+                    phone: event.target.value,
+                  }))
+                }
+                required
+              />
+            </label>
+            <label className="full-span">
+              Contacto de emergencia
+              <input
+                type="text"
+                value={personalForm.emergencyContact}
+                onChange={(event) =>
+                  setPersonalForm((current) => ({
+                    ...current,
+                    emergencyContact: event.target.value,
+                  }))
+                }
+              />
+            </label>
+            {personalStatus.error ? (
+              <div className="banner error full-span">{personalStatus.error}</div>
+            ) : null}
+            {personalStatus.success ? (
+              <div className="banner success full-span">{personalStatus.success}</div>
+            ) : null}
+            <button className="primary-btn" type="submit">
+              {personalStatus.loading ? "Guardando..." : "Actualizar informacion"}
+            </button>
+          </form>
+        </article>
+
+        <article className="detail-block profile-card">
+          <span className="detail-label">Cambio de contrasena</span>
+          <form className="profile-form" onSubmit={handleSubmitPassword}>
+            <label className="full-span">
+              Contrasena actual
+              <input
+                type="password"
+                value={passwordForm.currentPassword}
+                onChange={(event) =>
+                  setPasswordForm((current) => ({
+                    ...current,
+                    currentPassword: event.target.value,
+                  }))
+                }
+                required
+              />
+            </label>
+            <label>
+              Nueva contrasena
+              <input
+                type="password"
+                value={passwordForm.newPassword}
+                onChange={(event) =>
+                  setPasswordForm((current) => ({
+                    ...current,
+                    newPassword: event.target.value,
+                  }))
+                }
+                minLength="6"
+                required
+              />
+            </label>
+            <label>
+              Confirmar contrasena
+              <input
+                type="password"
+                value={passwordForm.confirmPassword}
+                onChange={(event) =>
+                  setPasswordForm((current) => ({
+                    ...current,
+                    confirmPassword: event.target.value,
+                  }))
+                }
+                minLength="6"
+                required
+              />
+            </label>
+            {passwordStatus.error ? (
+              <div className="banner error full-span">{passwordStatus.error}</div>
+            ) : null}
+            {passwordStatus.success ? (
+              <div className="banner success full-span">{passwordStatus.success}</div>
+            ) : null}
+            <button className="secondary-btn" type="submit">
+              {passwordStatus.loading ? "Actualizando..." : "Cambiar contrasena"}
+            </button>
+          </form>
+        </article>
+
+        {["municipal", "platform"].map((key) => (
+          <article className="detail-block profile-card" key={key}>
+            <span className="detail-label">{profileSectionTitles[key]}</span>
+            <div className="profile-fields">
+              {Object.entries(profile[key] || {}).map(([fieldKey, value]) => (
+                <div className="profile-field" key={fieldKey}>
+                  <strong>{humanizeField(fieldKey)}</strong>
+                  <span>{value}</span>
+                </div>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ShiftPanel({ user }) {
+  const shifts = user?.profile?.shifts ?? [];
+
+  if (!shifts.length) {
+    return <p>No hay turnos asignados para este inspector.</p>;
+  }
+
+  return (
+    <div className="shift-layout">
+      {shifts.map((shift) => (
+        <article className="shift-card" key={shift.id}>
+          <div className="shift-card-head">
+            <div>
+              <p className="eyebrow">Turno asignado</p>
+              <h4>{shift.name}</h4>
+            </div>
+            <span className="tag medium">{shift.days}</span>
+          </div>
+
+          <div className="detail-grid">
+            <DetailCard label="Horario" value={shift.hours} />
+            <DetailCard label="Punto de inicio" value={shift.checkpoint} />
+          </div>
+
+          <div className="detail-block">
+            <span className="detail-label">Rutas asignadas</span>
+            <ul className="shift-route-list">
+              {shift.routes.map((route) => (
+                <li key={route}>{route}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
 }
 
 function CaseDetail({ selectedCase }) {
@@ -1494,6 +1886,47 @@ function formatBytes(bytes) {
   }
 
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function buildPersonalForm(profile) {
+  return {
+    rut: profile?.personal?.rut || "",
+    email: profile?.personal?.email || "",
+    phone: profile?.personal?.phone || "",
+    emergencyContact: profile?.personal?.emergencyContact || "",
+  };
+}
+
+function getInitials(name) {
+  return String(name || "")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || "")
+    .join("");
+}
+
+function humanizeField(field) {
+  const labels = {
+    rut: "RUT",
+    email: "Correo institucional",
+    phone: "Telefono",
+    emergencyContact: "Contacto de emergencia",
+    municipality: "Dependencia",
+    unit: "Unidad",
+    badgeId: "Credencial",
+    shift: "Turno",
+    sector: "Sector asignado",
+    supervisor: "Supervisor",
+    appRole: "Rol en la app",
+    accessLevel: "Permisos",
+    device: "Dispositivo",
+    appVersion: "Version",
+    syncStatus: "Sincronizacion",
+    signatureStatus: "Firma digital",
+  };
+
+  return labels[field] || field;
 }
 
 function readFileAsDataUrl(file) {

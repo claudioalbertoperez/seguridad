@@ -6,6 +6,80 @@ export const users = [
     name: "Claudio Perez",
     role: "inspector",
     title: "Inspector municipal",
+    profile: {
+      personal: {
+        rut: "16.458.223-1",
+        email: "claudio.perez@seguridadmunicipal.cl",
+        phone: "+56 9 6123 4455",
+        emergencyContact: "Ana Perez - +56 9 7788 1122",
+      },
+      municipal: {
+        municipality: "Direccion de Seguridad Municipal",
+        unit: "Fiscalizacion Territorial",
+        badgeId: "ISM-214",
+        shift: "Turno tarde 14:00 - 22:00",
+        sector: "Santiago Centro y barrios comerciales",
+        supervisor: "Luis Torres",
+      },
+      platform: {
+        appRole: "Inspector en terreno",
+        accessLevel: "Creacion de casos, evidencia y actas",
+        device: "iPhone operativo municipal",
+        appVersion: "v1.6.2",
+        syncStatus: "Sincronizacion automatica habilitada",
+        signatureStatus: "Firma digital simple activa",
+      },
+      shifts: [
+        {
+          id: "turno-01",
+          name: "Turno diurno de fiscalizacion comercial",
+          days: "Lunes y martes",
+          hours: "08:00 a 16:00",
+          checkpoint: "Base operativa Santiago Centro",
+          routes: [
+            "Ruta A: Paseo Ahumada - Plaza de Armas - Catedral",
+            "Ruta B: San Antonio - Monjitas - Mercado Central",
+            "Ruta C: Alameda - Estado - San Diego",
+          ],
+        },
+        {
+          id: "turno-02",
+          name: "Turno tarde de control territorial",
+          days: "Miercoles y jueves",
+          hours: "14:00 a 22:00",
+          checkpoint: "Subcentral Barrio Franklin",
+          routes: [
+            "Ruta D: Franklin - Biobio - San Diego sur",
+            "Ruta E: Avenida Matta - Santa Rosa - Diez de Julio",
+            "Ruta F: Portugal - Santa Isabel - Vicuña Mackenna",
+          ],
+        },
+        {
+          id: "turno-03",
+          name: "Turno nocturno preventivo",
+          days: "Viernes",
+          hours: "18:00 a 02:00",
+          checkpoint: "Subcentral Barrio Lastarria",
+          routes: [
+            "Ruta G: Lastarria - Bellas Artes - Parque Forestal",
+            "Ruta H: Bellavista - Pio Nono - Patronato",
+            "Ruta I: Plaza Baquedano - Bustamante - Parque San Borja",
+          ],
+        },
+        {
+          id: "turno-04",
+          name: "Cobertura fin de semana y ferias",
+          days: "Sabado y domingo",
+          hours: "09:00 a 17:00",
+          checkpoint: "Punto fijo Estacion Central",
+          routes: [
+            "Ruta J: Terminal Sur - Exposicion - Ecuador",
+            "Ruta K: Meiggs - Union Latinoamericana - Matucana",
+            "Ruta L: Feria local - plazas - ejes residenciales con incivilidades",
+          ],
+        },
+      ],
+    },
   },
   {
     id: "usr-supervisor-01",
@@ -14,6 +88,30 @@ export const users = [
     name: "Luis Torres",
     role: "supervisor",
     title: "Supervisor de fiscalizacion",
+    profile: {
+      personal: {
+        rut: "14.102.887-6",
+        email: "luis.torres@seguridadmunicipal.cl",
+        phone: "+56 9 5234 9901",
+        emergencyContact: "Mesa de turno - +56 2 2444 0190",
+      },
+      municipal: {
+        municipality: "Direccion de Seguridad Municipal",
+        unit: "Coordinacion de Fiscalizacion",
+        badgeId: "SUP-031",
+        shift: "Turno administrativo 08:30 - 18:00",
+        sector: "Cobertura comunal",
+        supervisor: "Administracion central",
+      },
+      platform: {
+        appRole: "Supervisor operativo",
+        accessLevel: "Dashboard, revision de casos y control operacional",
+        device: "Notebook de supervision",
+        appVersion: "v1.6.2",
+        syncStatus: "Monitoreo de flota y cola offline",
+        signatureStatus: "Validacion de actas habilitada",
+      },
+    },
   },
 ];
 

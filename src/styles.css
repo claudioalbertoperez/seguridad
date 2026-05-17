@@ -222,6 +222,14 @@ textarea {
   background: linear-gradient(135deg, rgba(173, 84, 209, 0.28), rgba(115, 88, 235, 0.16));
 }
 
+.nav-button-profile {
+  background: linear-gradient(135deg, rgba(33, 119, 154, 0.28), rgba(98, 191, 230, 0.18));
+}
+
+.nav-button-shifts {
+  background: linear-gradient(135deg, rgba(225, 144, 47, 0.28), rgba(243, 187, 92, 0.18));
+}
+
 .nav-button-new-case.active,
 .nav-button-new-case:hover {
   background: linear-gradient(135deg, rgba(45, 160, 95, 0.55), rgba(69, 197, 124, 0.32));
@@ -235,6 +243,16 @@ textarea {
 .nav-button-detail.active,
 .nav-button-detail:hover {
   background: linear-gradient(135deg, rgba(173, 84, 209, 0.5), rgba(115, 88, 235, 0.28));
+}
+
+.nav-button-profile.active,
+.nav-button-profile:hover {
+  background: linear-gradient(135deg, rgba(33, 119, 154, 0.52), rgba(98, 191, 230, 0.32));
+}
+
+.nav-button-shifts.active,
+.nav-button-shifts:hover {
+  background: linear-gradient(135deg, rgba(225, 144, 47, 0.52), rgba(243, 187, 92, 0.32));
 }
 
 .sidebar-card {
@@ -757,6 +775,117 @@ textarea {
   object-fit: cover;
 }
 
+.profile-layout {
+  display: grid;
+  gap: 18px;
+}
+
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(23, 59, 95, 0.96), rgba(58, 154, 217, 0.86));
+  color: #ffffff;
+}
+
+.profile-summary h4 {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+}
+
+.profile-summary-copy {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.profile-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.profile-card {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.profile-fields {
+  display: grid;
+  gap: 12px;
+}
+
+.profile-field {
+  display: grid;
+  gap: 4px;
+}
+
+.profile-field strong {
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+
+.profile-field span {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.shift-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.shift-card {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(247, 251, 255, 0.92);
+  border: 1px solid var(--line);
+}
+
+.shift-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.shift-card-head h4 {
+  margin: 4px 0 0;
+  font-size: 1.08rem;
+}
+
+.shift-route-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  display: grid;
+  gap: 8px;
+}
+
 .full-span,
 .full-width {
   grid-column: 1 / -1;
@@ -968,8 +1097,21 @@ textarea {
 
   .case-form,
   .credential-cards,
-  .category-grid {
+  .category-grid,
+  .profile-form {
     grid-template-columns: 1fr;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-summary {
+    align-items: flex-start;
+  }
+
+  .shift-card-head {
+    display: grid;
   }
 
   .form-section {
