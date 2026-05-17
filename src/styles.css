@@ -981,11 +981,79 @@ textarea {
   }
 
   .sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "brand actions";
+    align-items: center;
     gap: 18px;
+    padding: 12px 14px 8px;
     background:
       linear-gradient(180deg, rgba(18, 37, 58, 0.98), rgba(23, 59, 95, 0.94));
     border-bottom-left-radius: 24px;
     border-bottom-right-radius: 24px;
+  }
+
+  .sidebar > div:first-child {
+    grid-area: brand;
+    text-align: center;
+    justify-self: center;
+  }
+
+  .sidebar-card {
+    grid-area: actions;
+    padding: 0;
+    background: transparent;
+    border: none;
+    justify-self: end;
+  }
+
+  .sidebar-card > div {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sidebar-copy,
+  .sidebar-card p {
+    display: none;
+  }
+
+  .sidebar h1 {
+    max-width: 210px;
+    font-size: 0.98rem;
+    line-height: 1.12;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .logout-btn {
+    margin-top: 0;
+    padding: 0;
+    gap: 0;
+    white-space: nowrap;
+    min-width: 28px;
+    min-height: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .logout-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.72rem;
+  }
+
+  .sidebar-card strong {
+    display: block;
+    margin-top: 0;
+    text-align: right;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(238, 245, 251, 0.84);
+  }
+
+  .logout-btn span:last-child {
+    display: none;
   }
 
   .nav {
